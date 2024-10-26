@@ -51,7 +51,10 @@ internal static class VoicesManager
                 var types = Assembly.LoadFrom(file).GetTypes();
                 LoadFromTypes(types, path);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Failed to load extension {0}: {1}", extensionName, ex));
+            }
         }
     }
 

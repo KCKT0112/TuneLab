@@ -51,7 +51,10 @@ internal static class FormatsManager
                 var types = Assembly.LoadFrom(file).GetTypes();
                 LoadFromTypes(types);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Log.Error(string.Format("Failed to load extension {0}: {1}", extensionName, ex));
+            }
         }
     }
 
@@ -97,7 +100,7 @@ internal static class FormatsManager
     {
         projectInfo = null;
         error = null;
-       
+
         try
         {
             var fileInfo = new FileInfo(filePath);
@@ -124,7 +127,7 @@ internal static class FormatsManager
     {
         stream = null;
         error = null;
-        
+
         try
         {
             if (!mImportFormats.ContainsKey(format))
