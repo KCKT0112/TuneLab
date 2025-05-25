@@ -27,10 +27,24 @@ internal partial class PianoScrollView
         switch (e.KeyModifiers)
         {
             case ModifierKeys.None:
-                PitchAxis.AnimateMove(70 * e.Delta.Y);
+                if (Math.Abs(e.Delta.Y) > Math.Abs(e.Delta.X))
+                {
+                    PitchAxis.AnimateMove(120 * e.Delta.Y);
+                }
+                else
+                {
+                    TickAxis.AnimateMove(400 * e.Delta.X);
+                }
                 break;
             case ModifierKeys.Shift:
-                TickAxis.AnimateMove(240 * e.Delta.Y);
+                if (Math.Abs(e.Delta.Y) > Math.Abs(e.Delta.X))
+                {
+                    TickAxis.AnimateMove(400 * e.Delta.Y);
+                }
+                else
+                {
+                    PitchAxis.AnimateMove(120 * e.Delta.X);
+                }
                 break;
             case ModifierKeys.Ctrl:
                 TickAxis.AnimateScale(TickAxis.Coor2Pos(e.Position.X), e.Delta.Y);

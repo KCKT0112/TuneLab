@@ -25,10 +25,24 @@ internal partial class TrackScrollView
         switch (e.KeyModifiers)
         {
             case ModifierKeys.None:
-                TrackVerticalAxis.AnimateMove(70 * e.Delta.Y);
+                if (Math.Abs(e.Delta.Y) > Math.Abs(e.Delta.X))
+                {
+                    TrackVerticalAxis.AnimateMove(70 * e.Delta.Y);
+                }
+                else
+                {
+                    TickAxis.AnimateMove(240 * e.Delta.X);
+                }
                 break;
             case ModifierKeys.Shift:
-                TickAxis.AnimateMove(240 * e.Delta.Y);
+                if (Math.Abs(e.Delta.Y) > Math.Abs(e.Delta.X))
+                {
+                    TickAxis.AnimateMove(240 * e.Delta.Y);
+                }
+                else
+                {
+                    TrackVerticalAxis.AnimateMove(70 * e.Delta.X);
+                }
                 break;
             case ModifierKeys.Ctrl:
                 TickAxis.AnimateScale(TickAxis.Coor2Pos(e.Position.X), e.Delta.Y);
