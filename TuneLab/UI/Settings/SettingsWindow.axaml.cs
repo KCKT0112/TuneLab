@@ -124,7 +124,7 @@ internal partial class SettingsWindow : Window
             var panel = new DockPanel() { Margin = new(24, 12) };
             {
                 var comboBox = new ComboBoxController() { Width = 180 };
-                comboBox.SetConfig(new([32000, 44100, 48000, 96000, 192000], 44100));
+                comboBox.SetConfig(new((int[])[32000, 44100, 48000, 96000, 192000], 44100));
                 s += comboBox.BindProperty(Settings.SampleRate, false);
                 comboBox.Display(AudioEngine.SampleRate.Value.ToString());
 
@@ -140,7 +140,7 @@ internal partial class SettingsWindow : Window
             var panel = new DockPanel() { Margin = new(24, 12) };
             {
                 var comboBox = new ComboBoxController() { Width = 180 };
-                comboBox.SetConfig(new([64, 128, 256, 512, 1024, 2048, 4096, 8192], 1024));
+                comboBox.SetConfig(new((short[])[64, 128, 256, 512, 1024, 2048, 4096, 8192], (short)1024));
                 s += comboBox.BindProperty(Settings.BufferSize, false);
                 comboBox.Display(AudioEngine.BufferSize.Value.ToString());
 
