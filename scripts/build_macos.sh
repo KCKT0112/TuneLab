@@ -111,6 +111,7 @@ create_app_bundle() {
     # 创建 .app 目录结构
     mkdir -p "${app_path}/Contents/MacOS"
     mkdir -p "${app_path}/Contents/Resources"
+    mkdir -p "${app_path}/Contents/MacOS/ExtensionCompatibilityLayer"
     
     # 移动可执行文件到 MacOS 目录
     mv "${build_dir}/TuneLab" "${app_path}/Contents/MacOS/"
@@ -122,7 +123,10 @@ create_app_bundle() {
     find "${build_dir}" -name "*.toml" -exec cp {} "${app_path}/Contents/MacOS/Resources/Translations/" \;
     
     # 复制其他运行时文件到 MacOS 目录（排除已移动的可执行文件和 .toml 文件）
-    find "${build_dir}" -type f -not -name "TuneLab" -not -name "*.toml" -exec cp {} "${app_path}/Contents/MacOS/" \;
+    find "${build_dir}" -type f -not -name "TuneLab" -not -name "*.toml" -not -path "*/ExtensionCompatibilityLayer/*" -exec cp {} "${app_path}/Contents/MacOS/" \;
+
+    # 复制 ExtensionCompatibilityLayer 到 MacOS 目录
+    cp -r "${build_dir}/ExtensionCompatibilityLayer" "${app_path}/Contents/MacOS/"
     
     # 复制运行时配置文件
     cp "${build_dir}"/*.deps.json "${app_path}/Contents/MacOS/" 2>/dev/null || true
@@ -182,6 +186,12 @@ build_app() {
         -p:PublishSingleFile=true \
         -p:IncludeNativeLibrariesForSelfExtract=true \
         -o "${build_dir}"
+
+    # 构建ExtensionCompatibilityLayer
+    dotnet publish ExtensionCompatibilityLayer/ExtensionCompatibilityLayer/ExtensionCompatibilityLayer.csproj \
+        -c Release \
+        -r osx-${arch} \
+        -o "${build_dir}/ExtensionCompatibilityLayer"
     
     # 创建 .app 包
     create_app_bundle "${build_dir}"
